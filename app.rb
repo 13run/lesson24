@@ -25,6 +25,17 @@ post '/visits' do
   @message = ''
   @f = File.open('./public/users.txt', 'a+')
 
+  errors_hh = { user_name: 'Введите имя',
+                user_phone: 'Введите номер телефона',
+                date_time: 'Ведите дату и время' }
+
+  errors_hh.each do |key, _value|
+    if params[key] == ''
+      @error = errors_hh[key]
+      return erb :visits
+    end
+  end
+
   def is_time_busy?
     @f.each do |line|
       return true if line.include?(@date)
