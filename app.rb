@@ -3,6 +3,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader'
+require 'pony'
 
 get '/' do
   erb 'Hello! <a href="https://github.com/bootstrap-ruby/sinatra-bootstrap">Original</a> pattern has been modified for <a href="http://rubyschool.us/">Ruby School</a>'
@@ -73,9 +74,26 @@ post '/contacts' do
   @user_mail = params[:user_email]
   @user_msg = params[:user_message]
 
-  @f = File.open('./public/contacts.txt', 'a')
+  @error = 'Введите email' if @user_mail == ''
+
+  @f = File.open('./public/contacts.txt', 'a+')
   @f.write "User mail: [#{@user_mail}] -- Message: [#{@user_msg}]\n"
   @f.close
 
+  Pony.mail ({
+    to: 'runemal13@gmail.com',
+    from: params[:user_email],
+    subject: 'from barbershop',
+    body: "User: #{params[:user_email]}\nMessage: #{params[:user_message]}",
+    via: :smtp,
+    via_options: {
+          address: 'smtp.gmail.com',
+          port: '587',
+          user_name: 'runemal13',
+          password: 'dzenMidzeN13',
+          authentication: :plain, 
+          domain: "gmail.com" 
+          } 
+     })
   erb :contacts
 end
