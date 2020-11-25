@@ -22,12 +22,39 @@ post '/visits' do
   @date = params[:date_time]
   @barber = params[:barber]
   @colorpicker = params[:colorpicker]
+  @message = ''
+  @f = File.open('./public/users.txt', 'a+')
 
-  @f = File.open('./public/users.txt', 'a')
-  @f.write "User: [#{@user}] -- Phone: [#{@phone}] -- Date time: [#{@date}] -- Barber: [#{@barber}] -- Hair color: [#{@colorpicker}]\n"
+  def is_time_busy?
+    @f.each do |line|
+      return true if line.include?(@date)
+    end
+
+    false
+  end
+
+  def is_barber_busy?
+    @f.each do |line|
+      return true if line.include?(@barber)
+    end
+
+    false
+  end
+
+  def add_client
+    @f.write "User: [#{@user}] -- Phone: [#{@phone}] -- Date time: [#{@date}] -- Barber: [#{@barber}] -- Hair color: [#{@colorpicker}]\n"
+  end
+
+  if is_date_busy? && is_barber_busy?
+
+    @message = "Dear, #{@user}! #{@date} is busy :( Try another time."
+  else
+    add_client
+    @message = "Dear, #{@user}! We'll wait you at #{@date}. Your barber - #{@barber}. You choose #{@colorpicker} color for hair."
+  end
+
   @f.close
-
-  erb "Dear, #{@user}! We'll wait you at #{@date}. Your barber - #{@barber}. You choose #{@colorpicker} color for hair."
+  erb @message
 end
 
 get '/contacts' do
