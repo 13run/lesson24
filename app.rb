@@ -29,12 +29,9 @@ post '/visits' do
                 user_phone: 'Введите номер телефона',
                 date_time: 'Ведите дату и время' }
 
-  errors_hh.each do |key, _value|
-    if params[key] == ''
-      @error = errors_hh[key]
-      return erb :visits
-    end
-  end
+  @error = errors_hh.select { |key, _value| params[key] == '' }.values.join(', ')
+
+  return erb :visits if @error != ''
 
   def is_time_busy?
     @f.each do |line|
@@ -56,7 +53,7 @@ post '/visits' do
     @f.write "User: [#{@user}] -- Phone: [#{@phone}] -- Date time: [#{@date}] -- Barber: [#{@barber}] -- Hair color: [#{@colorpicker}]\n"
   end
 
-  if is_date_busy? && is_barber_busy?
+  if is_time_busy? && is_barber_busy?
 
     @message = "Dear, #{@user}! #{@date} is busy :( Try another time."
   else

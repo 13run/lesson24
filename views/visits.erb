@@ -3,17 +3,17 @@
 <form action="/visits" method="POST">
   <div class="form-group">
     <label>Ваше имя</label>
-    <input type="text" class="form-control" name="user_name" placeholder="введите Ваше имя">
+    <input type="text" class="form-control" name="user_name" placeholder="введите Ваше имя" value="<%=@user%>">
   </div>
   
   <div class="form-group">
     <label>Ваш телефон</label>
-    <input type="text" class="form-control" name="user_phone" placeholder="telephone">
+    <input type="text" class="form-control" name="user_phone" placeholder="telephone" value="<%=@phone%>">
   </div>
 
   <div class="form-group">
     <label>Когда вас ждать</label>
-    <input type="text" class="form-control" name="date_time" placeholder="дд.мм час:мин">
+    <input type="text" class="form-control" name="date_time" placeholder="дд.мм час:мин" value="<%=@date%>">
   </div>
 
   <div class="form-group">
@@ -28,6 +28,7 @@
     <label>В какой цвет покрасить волосы?</label>
       <div>
         <select name="colorpicker">
+          <option >none</option>
           <option value="#7bd148">Green</option>
           <option value="#5484ed">Bold blue</option>
           <option value="#a4bdfc">Blue</option>
